@@ -12,12 +12,21 @@ client.connect();
 client.on( 'error', err => console.error( err ) );
 
 app.use( cors() );
-app.get( '/', ( req, res ) => res.send( 'Testing 1, 2, 3' ) );
-app.get( '*', ( req, res ) => res.status( 403 ).send( 'This route does not exist.' ) );
-app.listen( PORT, () => console.log( `Listening on port: ${PORT}` ) );
 
-app.get( '/api/v1/books', ( req, res ) => {
-  client.query( `SELECT book_id, title, author, image_url FROM books;` )
-    .then( results => res.send( result.rows ) )
-    .catch( console.error );
-} )
+app.use(express.json());
+app.use(express.urlencoded({extend:true}));
+app.get( '/', ( req, res ) => res.send( 'Testing 1, 2, 3' ));
+
+
+app.get('/api/v1/books', (request, response) => {
+  console.log(request.body);
+  client.query(`SELECT * FROM books;`)
+  .then(result => response.send(result.rows))
+  .catch(console.error);
+})
+
+app.get( '*', ( req, res ) => res.status( 403 ).send( 'This route does not exist.' ));
+
+app.listen( PORT, () => console.log( `Listening on port: ${PORT}` ));
+
+
