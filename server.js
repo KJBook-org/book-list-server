@@ -25,6 +25,12 @@ app.get('/api/v1/books', (request, response) => {
   .catch(console.error);
 })
 
+app.get('/api/v1/books/:id', (request, response) => {
+  client.query(`SELECT * FROM books WHERE book_id = ${request.params.id}`)
+  .then(result => response.send(result.rows))
+  .catch(console.error)
+})
+
 app.get( '*', ( req, res ) => res.status( 403 ).send( 'This route does not exist.' ));
 
 app.listen( PORT, () => console.log( `Listening on port: ${PORT}` ));
