@@ -32,7 +32,17 @@ app.get( '/api/v1/books/:id', ( request, response ) => {
 } )
 
 app.post( '/api/v1/books', ( request, response ) => {
-  
+  let SQL = 'INSERT INTO books (author, title, isbn, image_url) VALUES ($2, $3, $4, $5)'
+  let values = [
+    request.body.author,
+    request.body.title,
+    request.body.isbn,
+    request.body.image_url
+  ]
+
+  client.query(SQL, values)
+  .then(() => response.sendStatus(201))
+  .catch(console.error);
 
 } )
 
